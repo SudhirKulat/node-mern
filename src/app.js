@@ -14,7 +14,67 @@ app.post('/signup', async (req, res)=>{
       res.status(400).send('Something went wrong', err)
     }
 
-})
+});
+
+//User API GET user
+app.get('/user', async(req, res)=>{
+  try {
+    const userEmail = req.body.emailId;
+    const fetachedUser = await User.find({emailId: userEmail});
+    if(!fetachedUser?.length){
+      res.status(400).send('User not found')
+    }else{
+      res.send(fetachedUser);
+    }
+    
+  } catch (error) {
+    res.status(400).send('somethig went wromg'+ error.message)
+  }
+});
+
+//Feed API, get all the users
+
+app.get('/feed', async(req, res)=>{
+  try {
+    const fetachedUsers = await User.find({});
+    if(!fetachedUsers?.length){
+      res.status(400).send('Users not found')
+    }else{
+      res.send(fetachedUsers);  
+    }
+    
+  } catch (error) {
+    res.status(400).send('somethig went wrong'+ error.message)
+  }
+});
+
+//DELETE user
+
+app.delete('/user', async(req, res)=>{
+  const userId = req.body.userId;
+
+  try {
+    const deletedUser = await User.findByIdAndDelete(userId);
+    console.log(deletedUser);
+    res.send('user deleted successfully..!!')
+  } catch (error) {
+    res.status(400).send('something went wrong', error.message)
+  }
+});
+
+app.put('/user', async(req, res)=>{
+  const userId = req.body.userId;
+  const payload = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(userId, payload);
+    console.log(updatedUser);
+    res.send('user updated successfully..!!')
+  } catch (error) {
+    res.status(400).send('something went wrong', error.message)
+  }
+});
+
 connectDB()
   .then(() => {
     console.log("DB conncetd successfully");
