@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const cookieParser = require("cookie-parser");
+
 const userAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
@@ -19,10 +19,10 @@ const userAuth = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    res.status(400).send("Error : "+ error.message)
+    res.status(400).send("Error : " + error.message);
   }
 };
 
 module.exports = {
-    userAuth
-}
+  userAuth,
+};
